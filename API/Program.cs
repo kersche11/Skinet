@@ -1,18 +1,32 @@
+using API.Helpers;
+using API.Middleware;
+using API.Errors;
 using Core.Interfaces;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 // Add services to the container.
 
-builder.Services.AddControllers();
-builder.Services.AddDbContext<StoreContext>(x=>x.UseSqlite(connectionString));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-//Repositorys
-builder.Services.AddScoped<IProductRepository,ProductRepository>();
+
+
+
+//AutoMapper
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
+
+builder.Services.AddControllers();
+//Database connection
+builder.Services.AddDbContext<StoreContext>(x=>x.UseSqlite(connectionString));
+//Extensions
+builder.Services.AddApplicationServices();
+//Extensions/Swagger
+builder.Services.AddSwaggerDocumentation();
 
 var app = builder.Build();
 
@@ -37,17 +51,16 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseDeveloperExceptionPage();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseMiddleware<ExceptionMiddleware>();
+
+//Errorhandling
+app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
-
+//Middleware serve images from api
+app.UseStaticFiles();
 app.UseAuthorization();
-
+app.UseSwaggerDocumentaion();
 app.MapControllers();
 
 app.Run();
