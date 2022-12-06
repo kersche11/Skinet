@@ -27,6 +27,11 @@ builder.Services.AddDbContext<StoreContext>(x=>x.UseSqlite(connectionString));
 builder.Services.AddApplicationServices();
 //Extensions/Swagger
 builder.Services.AddSwaggerDocumentation();
+//CORS
+builder.Services.AddCors(opt=>{
+    opt.AddPolicy("CorsPolicy", policy => policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
+});
+
 
 var app = builder.Build();
 
@@ -59,6 +64,8 @@ app.UseStatusCodePagesWithReExecute("/errors/{0}");
 app.UseHttpsRedirection();
 //Middleware serve images from api
 app.UseStaticFiles();
+//Middleware cors
+app.UseCors("CorsPolicy");
 app.UseAuthorization();
 app.UseSwaggerDocumentaion();
 app.MapControllers();
