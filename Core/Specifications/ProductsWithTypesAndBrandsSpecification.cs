@@ -32,7 +32,7 @@ namespace Core.Specifications
                             AddOrderBy(p=>p.Price);
                             break;
 
-                             case "priceDec":
+                             case "priceDesc":
                             AddOrderByDescending(p=>p.Price);
                             break;
 
