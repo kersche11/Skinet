@@ -3,9 +3,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { IPagination } from '../shared/models/pagination';
 import { IBrand } from '../shared/models/brands';
 import { IType } from '../shared/models/productType';
+
 import { map } from 'rxjs';
 import { ShopModule } from './shop.module';
 import { ShopParams } from '../shared/models/shopParams';
+import { IProduct } from '../shared/models/product';
 
 
 @Injectable({
@@ -37,8 +39,8 @@ baseUrl = 'https://localhost:5001/api/';
     }
  
     params = params.append('sort',shopParams.sort)
-     params = params.append('pageIndex',shopParams.pageNumber.toString());
-     params = params.append('pageIndex',shopParams.pageSize.toString());
+    params = params.append('pageIndex',shopParams.pageNumber.toString());
+    params = params.append('pageIndex',shopParams.pageSize.toString());
 
 
 
@@ -50,6 +52,11 @@ baseUrl = 'https://localhost:5001/api/';
         })
       );
   }
+
+getProduct(id:number){
+  return this.http.get<IProduct>(this.baseUrl + 'products/'+ id);
+}
+
 
   getBrands(){
     return this.http.get<IBrand[]>(this.baseUrl + 'products/brands');
