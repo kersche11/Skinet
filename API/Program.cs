@@ -6,10 +6,14 @@ using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using API.Extensions;
+using Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
+using Core.Entities.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 //Extensions
 builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 builder.Services.AddControllers();
   //Extensions/Swagger
 builder.Services.AddSwaggerDocumentation();
@@ -26,27 +30,33 @@ app.UseRouting();
 app.UseStaticFiles();
 //Middleware cors
 app.UseCors("CorsPolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 //Migrations and DB Update
-using (var scope = app.Services.CreateScope())
-{
+using var scope = app.Services.CreateScope();
+
     var services = scope.ServiceProvider;
-    var loggerFactory = services.GetRequiredService<ILoggerFactory>(); 
+    var context=services.GetRequiredService<StoreContext>();
+    var identityContext=services.GetRequiredService<AppIdentityDbContext>();
+    var userManager=services.GetRequiredService<UserManager<AppUser>>();
+    var logger = services.GetRequiredService<ILogger<Program>>(); 
     try
     {
-        var context=services.GetRequiredService<StoreContext>();
+       
         await context.Database.MigrateAsync();
+        await identityContext.Database.MigrateAsync();
         //Dataseeding (Data/StoreContextSeed)
-        await StoreContextSeed.SeedAsync(context, loggerFactory);
+        await StoreContextSeed.SeedAsync(context);
+        await AppIdentityDbContextSeed.SeedUsersAsync(userManager);
     }   
     catch(Exception ex)
     {
-        var logger=loggerFactory.CreateLogger<Program>();
         logger.LogError(ex,"An error occured during migration");
     }
     
-}
+
 
 app.Run();
