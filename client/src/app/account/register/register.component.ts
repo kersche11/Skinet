@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { AccountService } from '../account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -6,5 +9,22 @@ import { Component } from '@angular/core';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
+
+  constructor (private fb: FormBuilder, private accountService:AccountService, private router:Router){}
+
+  complexPassword="(?=^.{6,15}$)((?=.*\d)(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*\d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*";
+
+  registerForm=this.fb.group({
+    displayName:['', Validators.required],
+    email:['',[Validators.required, Validators.email]],
+    password:['',[Validators.required, Validators.pattern(this.complexPassword)]],
+  })
+
+  onSubmit()
+  {
+    this.accountService.register(this.registerForm.value).subscribe({
+      next:()=>this.router.navigateByUrl('/shop')
+    })
+  }
 
 }

@@ -1,4 +1,4 @@
-import * as cuid from 'cuid';
+import {createId} from '@paralleldrive/cuid2';
 
 export interface Basket {
     id: string;
@@ -16,7 +16,7 @@ export interface Basket {
   }
 
   export class Basket implements Basket{
-    id=cuid();
+    id=createId();
     items: BasketItem[]=[];
   }
   export interface BasketTotals {
