@@ -3,6 +3,7 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="text-center mb-4">
         <h1 class="mb-3">Login</h1>
+<<<<<<< HEAD
   
 <app-text-input [formControl]="loginForm.controls['email']" [label]="'Email Address'"></app-text-input>
 <app-text-input [formControl]="loginForm.controls['password']" [type]="'password'" [label]="'Password'"></app-text-input>
@@ -10,9 +11,44 @@
       </div>
       <div class="d-grid">
         <button [disabled]="loginForm.invalid" class="btn btn-lg btn-primary mt-3" type="submit">
+=======
+        <div class="form-floating mb-3">
+          <input
+            type="email"
+            formControlName="email"
+            class="form-control"
+            id="floatingInput"
+            placeholder="Email"
+          />
+          <label for="floatingInput">Email address</label>
+        </div>
+        <div class="form-floating">
+          <input
+            type="password"
+            formControlName="password"
+            class="form-control"
+            id="floatingPassword"
+            placeholder="Password"
+          />
+          <label for="floatingPassword">Password</label>
+        </div>
+      </div>
+      <div class="d-grid">
+        <button class="btn btn-lg btn-primary mt-3" type="submit">
+>>>>>>> 0ac7fba43da4ac426ad1447d28aef74eb0413523
           Sign In
         </button>
       </div>
     </form>
   </div>
+<<<<<<< HEAD
+=======
+  <div class="col-4 ms-5">
+    <p>Form Status: {{ loginForm.status }}</p>
+    <p>Email Status: {{ loginForm.get("email")?.status }}</p>
+    <p>Form touched: {{ loginForm.get("email")?.touched }}</p>
+    <p>Form dirty: {{ loginForm.get("email")?.dirty }}</p>
+    <pre>{{ loginForm.value | json }}</pre>
+  </div>
+>>>>>>> 0ac7fba43da4ac426ad1447d28aef74eb0413523
 </div>
