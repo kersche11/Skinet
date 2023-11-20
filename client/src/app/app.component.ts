@@ -32,6 +32,6 @@ if(basketId) this.basketService.getBasket(basketId);
 
   loadCurrentUser(){
     const token = localStorage.getItem('token');
-    if(token) this.accountService.loadCurrentUser(token).subscribe();
+    this.accountService.loadCurrentUser(token).subscribe();
   }
 }
