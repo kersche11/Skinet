@@ -38,6 +38,10 @@ namespace API.Extensions
             services.AddScoped<IProductRepository, ProductRepository>();
             //TokenService
             services.AddScoped<ITokenService,TokenService>();
+            //OrderService
+            services.AddScoped<IOrderService,OrderService>();
+               //Unit of Work
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
             //IGenericRepo
             services.AddScoped(typeof(IGenericRepository<>), (typeof(GenericRepository<>)));
              //Errorhandling

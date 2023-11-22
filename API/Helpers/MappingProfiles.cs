@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using API.DTO;
 using AutoMapper;
 using Core.Entities;
@@ -21,6 +18,7 @@ namespace API.Helpers
             CreateMap<Address,AddressDto>().ReverseMap();
             CreateMap<CustomerBasketDto,CustomerBasket>();
             CreateMap<BasketItemDto,BasketItem>();
+            CreateMap<AddressDto,Core.Entities.OrderAggregate.Address>();
         }
     }
 }
